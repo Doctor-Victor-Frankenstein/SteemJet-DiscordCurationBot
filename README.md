@@ -16,7 +16,7 @@
 
 6. Now, enter `npm install`. This will create a node_modules folder inside the bot folder. Check if it's done.
 
-7. Now enter 'npm install pm2 -g'
+7. Now enter `npm install pm2 -g`
 
 Congratulations ! You succesfully installed the bot and all its dependencies !  
 
