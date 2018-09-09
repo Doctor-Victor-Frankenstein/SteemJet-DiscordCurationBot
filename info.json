@@ -1,0 +1,6 @@
+{
+  "infoCmdBot" : {
+      "upvote" : "**$upvote Insert_Link_Here** - Upvote the linked post",
+      "setUpvoteValue" : "**$setUpvoteValue Insert_Weight** - Set the upvote value (from 0 to 100)"
+  }
+}          

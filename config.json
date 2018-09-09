@@ -1,0 +1,14 @@
+{ 
+  "token"  : "INSERT_YOUR_TOKEN_HERE",
+  "prefix" : "$",
+  "admin"  : "INSERT_YOUR_DISCORD_ID_HERE",
+  "db"     : "mongodb://127.0.0.1/steemJet",
+  "accounts" : [
+  		//{"name" : "account", "key" : "INSERT_YOUR_POSTING_PRIVATE_KEY"}, //If you need more accounts, you can edit those lines and delete the  "//"" in front of each line you use
+  		//{"name" : "account", "key" : "INSERT_YOUR_POSTING_PRIVATE_KEY"},
+  		//{"name" : "account", "key" : "INSERT_YOUR_POSTING_PRIVATE_KEY"},
+  		//{"name" : "account", "key" : "INSERT_YOUR_POSTING_PRIVATE_KEY"},
+  		{"name" : "steemjet", "key" : "INSERT_YOUR_POSTING_PRIVATE_KEY"},
+  		{"name" : "einstei1", "key" : "INSERT_YOUR_POSTING_PRIVATE_KEY"}
+  	]
+}
