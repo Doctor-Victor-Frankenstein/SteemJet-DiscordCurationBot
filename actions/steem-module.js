@@ -49,7 +49,7 @@ function voteWithAllAccounts(message, weight, permLink, author){
         for(var x = 0;x < config.accounts.length;x++){
           var testing = config.accounts[x];
           steem.api.getAccounts(["steemjet"], function(error, res){
-            if(res.voting_power > 8000){
+            if(res.voting_power > config.minimumVotingPower){
               steem.broadcast.vote(testing.key, testing.name, author, permLink, weight, function(err, result) {
               });
             }
