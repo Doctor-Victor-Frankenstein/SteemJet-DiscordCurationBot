@@ -54,7 +54,7 @@ function voteWithAllAccounts(message, weight, permLink, author){
               });
             }
             else{
-              return message.channel.send("Voting Power too low ("+(res.voting_power/100)+"%)";
+              return message.channel.send("Voting Power too low ("+(res.voting_power/100)+"%)");
             }
           })
           
