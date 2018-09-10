@@ -4,6 +4,7 @@
   "prefix" : "$",
   "admin"  : "INSERT_YOUR_DISCORD_ID_HERE",
   "db"     : "mongodb://127.0.0.1/steemJet",
+  "minimumVotingPower": "7000",
   "accounts" : [
   		            {"name" : "einstei1", "key" : "INSERT_YOUR_POSTING_PRIVATE_KEY"}
   	           ],
