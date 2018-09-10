@@ -1,6 +1,6 @@
 const db = require('./db.js');
 const steem = require("steem");
-
+const config = require("./../config.json")
 
 exports.start = function(){
 	streamBlockchain();
@@ -15,8 +15,8 @@ function streamBlockchain(){
 					var sender = result[1].from;
 					var account = result[1].to;
 					var amount = result[1].amount;
-					if (account == "steemjet"){
-						if (amount == "0.002 SBD" || amount == "0.002 STEEM"){
+					if (account == config.owner){
+						if (amount == config.fee.SBD || amount == config.fee.STEEM){
 							db.setSubscription({user: sender});
 						}
 					}
