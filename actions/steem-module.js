@@ -40,28 +40,33 @@ module.exports = {
 }
 
 function voteWithAllAccounts(message, weight, permLink, author){
+  var osef;
   db.checkSubscription(author, function(out){
-    if(out.length){
+    if(out != undefined){
       if(weight == 0 || weight > 10000 || weight == null || permLink == null || author == null) {
         message.channel.send("Error : Bad request");
       }
       else{
-        for(var x = 0;x < config.accounts.length;x++){
-          var testing = config.accounts[x];
-          steem.api.getAccounts(["steemjet"], function(error, res){
-            if(res.voting_power > config.minimumVotingPower){
-              steem.broadcast.vote(testing.key, testing.name, author, permLink, weight, function(err, result) {
-              });
+        steem.api.getAccounts([config.owner], function(error, res){
+          osef = res[0].voting_power;
+            if(osef > config.minimumVotingPower){
+              console.log(res[0].voting_power)
+              for(var x = 0;x < config.accounts.length;x++){
+                var testing = config.accounts[x];                
+                steem.broadcast.vote(testing.key, testing.name, author, permLink, weight, function(err, result) {
+                  console.log(err, result);
+                  return message.channel.send("The post was successfully upvoted !");                  
+                });
+              }
             }
             else{
-              return message.channel.send("Voting Power too low ("+(res.voting_power/100)+"%)");
+              console.log("error")
+              return message.channel.send("Voting Power too low ("+osef+"%)");
             }
-          })
+        });
           
-        }
-        return message.channel.send("The post was successfully upvoted !");
-      }       
-    }
+      }
+    }       
     else{
       return message.channel.send("Your account hasn't been validated. Please send 0.002 STEEM/SBD to @steemjet account, or use this link : https://steemconnect.com/sign/transfer?from="+author+"&to=steemjet&amount=0.002%20STEEM");
     }
