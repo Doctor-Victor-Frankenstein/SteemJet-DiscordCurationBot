@@ -10,7 +10,7 @@ const bot = new Discord.Client();
 bot.login(config.token);
 
 var admin = config.admin
-var weight;
+var weight = 200;
 
 module.exports = {
   
