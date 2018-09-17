@@ -42,7 +42,7 @@ module.exports = {
 function voteWithAllAccounts(message, weight, permLink, author){
   var osef;
   db.checkSubscription(author, function(out){
-    if(out != undefined){
+    if(out.user != author){
       if(weight == 0 || weight > 10000 || weight == null || permLink == null || author == null) {
         message.channel.send("Error : Bad request");
       }
