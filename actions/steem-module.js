@@ -48,7 +48,8 @@ function voteWithAllAccounts(message, weight, permLink, author){
       }
       else{
         db.checkIfBlacklisted(author, function(output){
-          if(output != true){
+          console.log(output);
+          if(output == false){
             steem.api.getAccounts([config.owner], function(error, res){
               osef = res[0].voting_power;
                 if(osef > config.minimumVotingPower){

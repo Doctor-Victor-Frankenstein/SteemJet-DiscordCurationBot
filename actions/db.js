@@ -28,7 +28,7 @@ mongo.connect(url, function(err, db){
     }
 
     exports.checkIfBlacklisted = function(author, out){
-        fs.readFile('./blacklist.txt', 'utf8', function (err,data) {
+        fs.readFile('./blacklist', 'utf8', function (err,data) {
             if (err) {
                 return console.log(err);
             }
@@ -36,7 +36,6 @@ mongo.connect(url, function(err, db){
                 var testing = data.indexOf(author);
 
                 if(testing != -1){
-                    setup = 1;
                     return out(true);
                 }
                 else{
