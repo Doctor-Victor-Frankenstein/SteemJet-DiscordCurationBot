@@ -20,7 +20,7 @@ mongo.connect(url, function(err, db){
     }
 
     exports.checkSubscription = function(data, out){
-        var query = subscriptions.find({user: data.user});
+        var query = subscriptions.find({user: data});
         query.limit(1).sort({timestamp:1}).toArray(function(err,res){
             out(res);
         });
