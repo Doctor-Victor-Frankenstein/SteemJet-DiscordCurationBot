@@ -47,23 +47,31 @@ function voteWithAllAccounts(message, weight, permLink, author){
         message.channel.send("Error : Bad request");
       }
       else{
-        steem.api.getAccounts([config.owner], function(error, res){
-          osef = res[0].voting_power;
-            if(osef > config.minimumVotingPower){
-              console.log(res[0].voting_power)
-              for(var x = 0;x < config.accounts.length;x++){
-                var testing = config.accounts[x];                
-                steem.broadcast.vote(testing.key, testing.name, author, permLink, weight, function(err, result) {
-                  console.log(err, result);
-                  return message.channel.send("The post was successfully upvoted !");                  
-                });
-              }
-            }
-            else{
-              console.log("error")
-              return message.channel.send("Voting Power too low ("+osef+"%)");
-            }
+        db.checkIfBlacklisted(author, function(output){
+          if(output != true){
+            steem.api.getAccounts([config.owner], function(error, res){
+              osef = res[0].voting_power;
+                if(osef > config.minimumVotingPower){
+                  console.log(res[0].voting_power)
+                  for(var x = 0;x < config.accounts.length;x++){
+                    var testing = config.accounts[x];                
+                    steem.broadcast.vote(testing.key, testing.name, author, permLink, weight, function(err, result) {
+                      console.log(err, result);
+                      return message.channel.send("The post was successfully upvoted !");                  
+                    });
+                  }
+                }
+                else{
+                  console.log("error")
+                  return message.channel.send("Voting Power too low ("+osef+"%)");
+                }
+            });
+          }
+          else{
+            return message.channel.send("The user @"+author+" is blacklisted, therefore no upvote for this user.");
+          }
         });
+        
           
       }
     }       

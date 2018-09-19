@@ -1,5 +1,6 @@
 const mongo = require('mongodb').MongoClient;
 const config = require('./../config.json');
+const fs = require('fs');
 
 const url = process.env.MONGO_URI || config.db;
 
@@ -25,6 +26,31 @@ mongo.connect(url, function(err, db){
             out(res);
         });
     }
+
+    exports.checkIfBlacklisted = function(author, out){
+        fs.readFile('./blacklist.txt', 'utf8', function (err,data) {
+            if (err) {
+                return console.log(err);
+            }
+            else{
+                var testing = data.indexOf(author);
+
+                if(testing != -1){
+                    setup = 1;
+                    return out(true);
+                }
+                else{
+                    return out(false);
+                }
+                
+            }
+        });
+    }
+
+
+
+
+
 
     
 });
