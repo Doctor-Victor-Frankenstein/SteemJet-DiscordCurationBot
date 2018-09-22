@@ -57,13 +57,19 @@ mongo.connect(url, function(err, db){
     exports.checkIfAlreadyReceivedDailyUpvote = function(author, out){
         var query = votes.find({user: author});
         query.limit(1).sort({timestamp:1}).toArray(function(err,res){
-            var operation = Date.now() - res.timestamp;
-            if(operation >= 86400000){
-                out(false);
+            if(res.timestamp != undefined){
+                var operation = Date.now() - res.timestamp;
+                if(operation >= 86400000){
+                    out(false);
+                }
+                else{
+                    out(true);
+                } 
             }
             else{
-                out(true);
-            } 
+                out(false);
+            }
+            
         });
     }
 
