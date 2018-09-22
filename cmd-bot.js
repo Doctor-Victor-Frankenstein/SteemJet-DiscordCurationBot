@@ -4,6 +4,7 @@ const config = require("./config.json");
 
 var info = require("./info.json");
 var steemAction = require("./actions/steem-module.js");
+var db = require("./actions/db.js");
 
 const bot = new Discord.Client();
 
@@ -17,6 +18,25 @@ module.exports = {
   trailUpvote: function (message) {
     return steemAction.upvoteWithAllAccounts(message, weight);
   },
+
+  addUserToWhitelist: function (message) {
+    if(message.author.id == admin){
+      var ope = message.content.split(" ");
+      steem.api.getAccounts([ope[1]], function(err, result) {
+        if(result.length){
+          db.setSubscription(ope[1]);      
+          message.channel.send("The user @" + ope[1] + " was added to the whitelist!");
+        }
+        else{
+          message.channel.send("The user @" + ope[1] + " doesn't exist!");
+        }
+      });      
+    }
+    else{
+      message.channel.send("You're not allowed to use this function.");
+    }
+  },    
+  
 
   setUpvoteValue: function (message) { 
     if(message.author.id == admin){

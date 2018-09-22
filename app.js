@@ -30,6 +30,9 @@ bot.on("message", async message =>
     case "upvote":
       return cmd.trailUpvote(message);
 
+    case "adduser":
+      return cmd.addUserToWhitelist(message);
+
     case "setupvotevalue":
       return cmd.setUpvoteValue(message);
 

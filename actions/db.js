@@ -15,6 +15,7 @@ mongo.connect(url, function(err, db){
 
 
     var subscriptions = db.collection('subscriptions');
+    var votes         = db.collection('votes')
 
     exports.setSubscription = function(data){
         subscriptions.insert({"user": data.user});    
@@ -43,6 +44,26 @@ mongo.connect(url, function(err, db){
                 }
                 
             }
+        });
+    }
+
+    exports.addVote = function(author){
+        votes.insert({
+                                "user": author, 
+                                "timestamp": Date.now()
+                            });  
+    }
+
+    exports.checkIfAlreadyReceivedDailyUpvote = function(author, out){
+        var query = votes.find({user: author});
+        query.limit(1).sort({timestamp:1}).toArray(function(err,res){
+            var operation = Date.now() - res.timestamp;
+            if(operation >= 86400000){
+                out(false);
+            }
+            else{
+                out(true);
+            } 
         });
     }
 

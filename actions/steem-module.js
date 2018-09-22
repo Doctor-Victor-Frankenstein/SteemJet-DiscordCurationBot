@@ -48,25 +48,32 @@ function voteWithAllAccounts(message, weight, permLink, author){
       }
       else{
         db.checkIfBlacklisted(author, function(output){
-          console.log(output);
           if(output == false){
-            steem.api.getAccounts([config.owner], function(error, res){
-              osef = res[0].voting_power;
-                if(osef > config.minimumVotingPower){
-                  console.log(res[0].voting_power)
-                  for(var x = 0;x < config.accounts.length;x++){
-                    var testing = config.accounts[x];                
-                    steem.broadcast.vote(testing.key, testing.name, author, permLink, weight, function(err, result) {
-                      console.log(err, result);
-                      return message.channel.send("The post was successfully upvoted !");                  
-                    });
-                  }
-                }
-                else{
-                  console.log("error")
-                  return message.channel.send("Voting Power too low ("+osef+"%)");
-                }
-            });
+            db.checkIfAlreadyReceivedDailyUpvote(author, function(o){
+              if(o == false){
+                steem.api.getAccounts([config.owner], function(error, res){
+                  osef = res[0].voting_power;
+                    if(osef > config.minimumVotingPower){
+                      console.log(res[0].voting_power)
+                      for(var x = 0;x < config.accounts.length;x++){
+                        var testing = config.accounts[x];                
+                        steem.broadcast.vote(testing.key, testing.name, author, permLink, weight, function(err, result) {
+                          console.log(err, result);
+                          db.addVote(author);
+                          return message.channel.send("The post was successfully upvoted !");                  
+                        });
+                      }
+                    }
+                    else{
+                      console.log("error")
+                      return message.channel.send("Voting Power too low ("+osef+"%)");
+                    }
+                });
+              }
+              else{
+                return message.channel.send("You already claimed your free upvote for today. Please come back tomorrow!");
+              }
+            })
           }
           else{
             return message.channel.send("The user @"+author+" is blacklisted, therefore no upvote for this user.");
