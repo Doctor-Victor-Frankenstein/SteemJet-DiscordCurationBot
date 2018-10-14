@@ -36,7 +36,7 @@ module.exports = {
         voteWithAllAccounts(message, weight, permLink, author);
       }
     }   
-  }
+  } 
 }
 
 function voteWithAllAccounts(message, weight, permLink, author){
@@ -48,31 +48,44 @@ function voteWithAllAccounts(message, weight, permLink, author){
       }
       else{
         db.checkIfBlacklisted(author, function(output){
+          console.log("is blacklisted : " + output)
           if(output == false){
-            db.checkIfAlreadyReceivedDailyUpvote(author, function(o){
-              if(o == false){
-                steem.api.getAccounts([config.owner], function(error, res){
-                  osef = res[0].voting_power;
-                    if(osef > config.minimumVotingPower){
-                      console.log(res[0].voting_power)
-                      for(var x = 0;x < config.accounts.length;x++){
-                        var testing = config.accounts[x];                
-                        steem.broadcast.vote(testing.key, testing.name, author, permLink, weight, function(err, result) {
-                          console.log(err, result);
-                          db.addVote(author);
-                          return message.channel.send("The post was successfully upvoted !");                  
-                        });
-                      }
-                    }
-                    else{
-                      console.log("error")
-                      return message.channel.send("Voting Power too low ("+osef+"%)");
-                    }
-                });
+            steem.api.getContent(author, permLink, function(err1, result1) {
+              var timestamp       = Date.parse(result1.created);
+              var relativeTime    = Date.now() - timestamp;
+              console.log("relative time : " + relativeTime);
+              if(relativeTime >= 1740000){
+                db.checkIfAlreadyReceivedDailyUpvote(author, function(o){
+                  console.log("already upvoted today : " + o);
+                  if(o == false){
+                    steem.api.getAccounts([config.owner], function(error, res){
+                      osef = res[0].voting_power;
+                        if(osef > config.minimumVotingPower){
+                          console.log(res[0].voting_power)
+                          for(var x = 0;x < config.accounts.length;x++){
+                            var testing = config.accounts[x];                
+                            steem.broadcast.vote(testing.key, testing.name, author, permLink, weight, function(err, result) {
+                              console.log(err, result);
+                              db.addVote(author);
+                              return message.channel.send("The post was successfully upvoted !");                  
+                            });
+                          }
+                        }
+                        else{
+                          console.log("error")
+                          return message.channel.send("Voting Power too low ("+osef+"%)");
+                        }
+                    });
+                  }
+                  else{
+                    return message.channel.send("You already claimed your free upvote for today. Please come back tomorrow!");
+                  }
+                })
               }
               else{
-                return message.channel.send("You already claimed your free upvote for today. Please come back tomorrow!");
+                return message.channel.send("You must wait 30 minutes before we can upvote your post !");
               }
+              
             })
           }
           else{
@@ -84,7 +97,7 @@ function voteWithAllAccounts(message, weight, permLink, author){
       }
     }       
     else{
-      return message.channel.send("Your account hasn't been validated. Please send 0.002 STEEM/SBD to @steemjet account, or use this link : https://steemconnect.com/sign/transfer?from="+author+"&to=steemjet&amount=0.002%20STEEM");
+      return message.channel.send("Your account hasn't been validated. Please send 0.002 STEEM/SBD to @"+config.owner+" account, or use this link : https://steemconnect.com/sign/transfer?from="+author+"&to="+config.owner+"&amount=0.002%20STEEM");
     }
   });
   

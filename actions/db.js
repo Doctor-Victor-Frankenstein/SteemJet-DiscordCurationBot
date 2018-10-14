@@ -57,8 +57,10 @@ mongo.connect(url, function(err, db){
     exports.checkIfAlreadyReceivedDailyUpvote = function(author, out){
         var query = votes.find({user: author});
         query.limit(1).sort({timestamp:1}).toArray(function(err,res){
-            if(res.timestamp != undefined){
+            console.log(res)
+            if(res[0].timestamp != undefined){
                 var operation = Date.now() - res[0].timestamp;
+                console.log("time since last upvote : " + operation)
                 if(operation >= 86400000){
                     out(false);
                 }
