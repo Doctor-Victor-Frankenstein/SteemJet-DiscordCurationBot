@@ -36,6 +36,9 @@ bot.on("message", async message =>
     case "setupvotevalue":
       return cmd.setUpvoteValue(message);
 
+    case "switchbot":
+      return cmd.switchbot(message);
+
     case "help":
       return cmd.help(message);   
   }

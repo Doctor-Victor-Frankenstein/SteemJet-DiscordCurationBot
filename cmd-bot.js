@@ -12,11 +12,30 @@ bot.login(config.token);
 
 var admin = config.admin
 var weight = 200;
+var active = true;
 
 module.exports = {
   
   trailUpvote: function (message) {
-    return steemAction.upvoteWithAllAccounts(message, weight);
+    if(active == true){
+      return steemAction.upvoteWithAllAccounts(message, weight);
+    }
+  },
+
+  switchbot: function(message){
+    if(message.author.id == admin){
+      if(active == true){
+        active = false;
+        message.channel.send("The bot is now set to be offline!");
+      }
+      if(active == false){
+        active = true;
+        message.channel.send("The bot is now set to be online!");
+      }
+    }
+    else{
+      message.channel.send("You're not allowed to use this function.");
+    }
   },
 
   addUserToWhitelist: function (message) {
