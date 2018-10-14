@@ -34,13 +34,14 @@ mongo.connect(url, function(err, db){
                 return console.log(err);
             }
             else{
+                console.log("is @"+author+" blacklisted ?");
                 var testing = data.indexOf(author);
-
-                if(testing != -1){
-                    return out(true);
+                console.log(testing);
+                if(testing == -1){
+                    return out(false);
                 }
                 else{
-                    return out(false);
+                    return out(true);
                 }
                 
             }

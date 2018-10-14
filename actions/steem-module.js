@@ -54,7 +54,7 @@ function voteWithAllAccounts(message, weight, permLink, author){
               var timestamp       = Date.parse(result1.created);
               var relativeTime    = Date.now() - timestamp;
               console.log("relative time : " + relativeTime);
-              if(relativeTime >= 1740000){
+              if(relativeTime >= 17400000){
                 db.checkIfAlreadyReceivedDailyUpvote(author, function(o){
                   console.log("already upvoted today : " + o);
                   if(o == false){
