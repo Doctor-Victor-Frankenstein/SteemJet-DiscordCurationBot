@@ -1,6 +1,9 @@
 {
   "name": "discosteem",
   "version": "0.3.1",
+  "scripts": {
+    "start": "pm2 start app.js && pm2 start STMServer.js && pm2 monit"
+  },
   "dependencies": {
     "discord.js": "~11.3.2",
     "mongodb": "^2.2.30",

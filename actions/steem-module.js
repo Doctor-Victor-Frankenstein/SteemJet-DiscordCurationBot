@@ -51,15 +51,16 @@ function voteWithAllAccounts(message, weight, permLink, author){
           console.log("is blacklisted : " + output)
           if(output == false){
             steem.api.getContent(author, permLink, function(err1, result1) {
-              var timestamp       = Date.parse(result1.created);
+              var timestamp       = Date.parse(result1.created); console.log("Post created at : " + result1.created + " or " + timestamp);
               var relativeTime    = Date.now() - timestamp;
               console.log("relative time : " + relativeTime);
-              if(relativeTime >= 17400000){
+              if(relativeTime >= 9000000){
                 db.checkIfAlreadyReceivedDailyUpvote(author, function(o){
                   console.log("already upvoted today : " + o);
                   if(o == false){
                     steem.api.getAccounts([config.owner], function(error, res){
                       osef = res[0].voting_power;
+                      console.log("voting power is : " + osef)
                         if(osef > config.minimumVotingPower){
                           console.log(res[0].voting_power)
                           for(var x = 0;x < config.accounts.length;x++){

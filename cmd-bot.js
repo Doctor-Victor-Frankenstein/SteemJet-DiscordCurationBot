@@ -22,6 +22,42 @@ module.exports = {
     }
   },
 
+  addToBlacklist: function(message){
+    if(message.author.id == admin){
+      var ope = message.content.split(" ");
+      steem.api.getAccounts([ope[1]], function(err, result) {
+        if(result.length){
+          db.addToBlacklist(ope[1]);      
+          message.channel.send("The user @" + ope[1] + " was added to the blacklist!");
+        }
+        else{
+          message.channel.send("The user @" + ope[1] + " doesn't exist!");
+        }
+      });      
+    }
+    else{
+      message.channel.send("You're not allowed to use this function.");
+    }
+  },
+
+  removeFromBlacklist: function(message){
+    if(message.author.id == admin){
+      var ope = message.content.split(" ");
+      steem.api.getAccounts([ope[1]], function(err, result) {
+        if(result.length){
+          db.removeFromBlacklist(ope[1]);      
+          message.channel.send("The user @" + ope[1] + " was removed from the blacklist!");
+        }
+        else{
+          message.channel.send("The user @" + ope[1] + " doesn't exist!");
+        }
+      });      
+    }
+    else{
+      message.channel.send("You're not allowed to use this function.");
+    }
+  },
+
   switchbot: function(message){
     if(message.author.id == admin){
       if(active == true){

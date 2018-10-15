@@ -4,13 +4,13 @@ const config = require("./config.json");
 
 var bot = new Discord.Client({autoReconnect:true});
 
-var streamOp = require("./actions/streamOp.js");
+
 var cmd = require("./cmd-bot.js");
 
 bot.on("ready", () => {
   console.log("Discord Bot Ready !");
   bot.user.setActivity('SteemJet');
-  streamOp.start();
+  
 });
 
 bot.setTimeout (function () {
@@ -35,6 +35,12 @@ bot.on("message", async message =>
 
     case "setupvotevalue":
       return cmd.setUpvoteValue(message);
+
+    case "addtoblacklist":
+      return cmd.addToBlacklist(message);
+
+    case "removefromblacklist":
+      return cmd.removeFromBlacklist(message);
 
     case "switchbot":
       return cmd.switchbot(message);

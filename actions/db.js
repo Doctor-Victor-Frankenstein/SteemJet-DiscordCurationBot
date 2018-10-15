@@ -13,9 +13,9 @@ mongo.connect(url, function(err, db){
         console.log('MongoDB connected...');
     }
 
-
     var subscriptions = db.collection('subscriptions');
-    var votes         = db.collection('votes')
+    var blacklist     = db.collection('blacklist');
+    var votes         = db.collection('votes');
 
     exports.setSubscription = function(data){
         subscriptions.insert({"user": data.user});    
@@ -28,24 +28,29 @@ mongo.connect(url, function(err, db){
         });
     }
 
+    exports.addToBlacklist = function(data){
+        blacklist.insert({"user": data.user});    
+    }
+
+    exports.removeFromBlacklist = function(data){
+        blacklist.remove({"user": data.user});    
+    }
+
     exports.checkIfBlacklisted = function(author, out){
-        fs.readFile('./blacklist', 'utf8', function (err,data) {
-            if (err) {
-                return console.log(err);
-            }
-            else{
-                console.log("is @"+author+" blacklisted ?");
-                var testing = data.indexOf(author);
-                console.log(testing);
-                if(testing == -1){
-                    return out(false);
+        var query = blacklist.find({user: author});
+        query.toArray(function(error, res){
+            if(res.length){
+                if(res[0].user == author){
+                    return out(true)
                 }
                 else{
-                    return out(true);
+                    return out(false)
                 }
-                
             }
-        });
+            else{
+                out(false)
+            }
+        })
     }
 
     exports.addVote = function(author){
@@ -57,13 +62,13 @@ mongo.connect(url, function(err, db){
 
     exports.checkIfAlreadyReceivedDailyUpvote = function(author, out){
         var query = votes.find({user: author});
-        query.limit(1).sort({timestamp:1}).toArray(function(err,res){
+        query.limit(1).sort({timestamp:-1}).toArray(function(err,res){
             console.log(res)
             if(res.length){
                 if(res[0].timestamp != undefined){
                     var operation = Date.now() - res[0].timestamp;
                     console.log("time since last upvote : " + operation)
-                    if(operation >= 86400000){
+                    if(operation >= 86400000){ 
                         out(false);
                     }
                     else{
